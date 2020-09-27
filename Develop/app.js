@@ -120,17 +120,17 @@ async function getEmployee() {
                 {
                     message: "What is the engineers' name?",
                     type: 'input',
-                    name: 'engineername'
+                    name: 'name'
                 },
                 {
                     message: 'What is their ID number?',
                     type: 'input',
-                    name: 'engineerid'
+                    name: 'id'
                 },
                 {
                     message: 'What is their email address?',
                     type: 'input',
-                    name: 'engineeremail'
+                    name: 'email'
                 },
                 {
                     message: 'What is their personal GitHub URL?',
@@ -145,22 +145,15 @@ async function getEmployee() {
                 }
             ]);
 
-            
-        };
+            const engineer1 = new Engineer(engineer.name, engineer.id, engineer.email, engineer.github);
+            members.push(engineer1);
 
-        // if(intern.confirm == true) {
-        //     getEmployee();
-        // } else {
-        //     console.log(members);
-        // };
-
-        // if(engineer.confirm == true) {
-        //     getEmployee();
-        // } else {
-        //     console.log(members);
-        // };
-
-        
+            if(engineer.confirm == true) {
+                getEmployee();
+            } else {
+                console.log(members);
+            };
+        }; 
     } catch(error) {
         console.log(error);
     };
@@ -179,26 +172,6 @@ getManager();
 //     console.log(err);
 // });
 
-
-// function promptUser() {
-//     if () {
-//     inquirer.prompt{[
-//         {
-//             message: 'What is the managers name',
-//             type: 'input',
-//             name: 'managername'       
-//     },
-
-//     {
-//         message: 'What is the managers ID number?',
-//         type: 'input',
-//         name: 'managerID'
-//     }
-//     ]}
-
-//     promptUser();
-//     }
-// }
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
