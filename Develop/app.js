@@ -22,6 +22,8 @@ const render = require("./lib/htmlRenderer");
 // Write code to use inquirer to gather information about the development team membeers,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
+const members = [];
+
 //Prompt for manager information(only executed once)
 async function getManager() {
     try{
@@ -47,15 +49,17 @@ async function getManager() {
                 name: 'officenumber'
             }
         ]);
-
         const manager1 = new Manager(manager.name, manager.id, manager.email, manager.officenumber);
-        console.log(manager1);
+        members.push(manager1);
     } catch(error) {
         console.log(error);
     };
 };
 
-getManager();
+getManager()
+.then(() => {
+    console.log(members);
+});
 
 //Prompt for emplyee information with choices for either an intern or engineer
 //Recursive function that exits only when the user declines to enter further info
