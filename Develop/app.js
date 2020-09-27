@@ -49,104 +49,136 @@ async function getManager() {
                 name: 'officenumber'
             }
         ]);
+
         const manager1 = new Manager(manager.name, manager.id, manager.email, manager.officenumber);
         members.push(manager1);
+
+        getEmployee();
+
     } catch(error) {
         console.log(error);
     };
 };
 
-getManager()
-.then(() => {
-    console.log(members);
-});
 
 //Prompt for emplyee information with choices for either an intern or engineer
 //Recursive function that exits only when the user declines to enter further info
-function getEmployee() {
-    const choice = inquirer.prompt([
-        {
-            type: 'list',
-            choices: [
-                'Intern',
-                'Engineer'
-            ],
-            name: 'type'
-        },
-    ]);
-
-    if(choice.type == 'Intern') {
-        const intern = inquirer.prompt([
+async function getEmployee() {
+    try {
+        const choice = await inquirer.prompt([
             {
-                message: "What is the interns' name?",
-                type: 'input',
-                name: 'internname'
+                type: 'list',
+                choices: [
+                    'Intern',
+                    'Engineer'
+                ],
+                name: 'type'
             },
-            {
-                message: 'What is their ID number?',
-                type: 'input',
-                name: 'internid'
-            },
-            {
-                message: 'What is their email address?',
-                type: 'input',
-                name: 'internemail'
-            },
-            {
-                message: 'What school do they attend?',
-                type: 'input',
-                name: 'school'
-            },
-            {
-                message: 'Would you like to enter another employee?',
-                type: 'confirm',
-                name: 'confirm',
-                default: 'false'
-            }
         ]);
-    } else {
-        const engineer = inquirer.prompt([
-            {
-                message: "What is the engineers' name?",
-                type: 'input',
-                name: 'engineername'
-            },
-            {
-                message: 'What is their ID number?',
-                type: 'input',
-                name: 'engineerid'
-            },
-            {
-                message: 'What is their email address?',
-                type: 'input',
-                name: 'engineeremail'
-            },
-            {
-                message: 'What is their personal GitHub URL?',
-                type: 'input',
-                name: 'github'
-            },
-            {
-                message: 'Would you like to enter another employee?',
-                type: 'confirm',
-                name: 'confirm',
-                default: 'false'
-            }
-        ]);
-    };
 
-    if(intern.confirm == true) {
-        getEmployee();
-    } else {
-        //call render function here or exit process
-    };
+        if(choice.type == 'Intern') {
+            const intern = await inquirer.prompt([
+                {
+                    message: "What is the interns' name?",
+                    type: 'input',
+                    name: 'name'
+                },
+                {
+                    message: 'What is their ID number?',
+                    type: 'input',
+                    name: 'id'
+                },
+                {
+                    message: 'What is their email address?',
+                    type: 'input',
+                    name: 'email'
+                },
+                {
+                    message: 'What school do they attend?',
+                    type: 'input',
+                    name: 'school'
+                },
+                {
+                    message: 'Would you like to enter another employee?',
+                    type: 'confirm',
+                    name: 'confirm',
+                    default: 'false'
+                }
+            ]);
 
-    if(engineer.confirm == true) {
-        getEmployee();
-    } else {
-        //execute some other function or exit process
+            const intern1 = new Intern(intern.name, intern.id, intern.email, intern.school);
+            members.push(intern1);
+
+            if(intern.confirm == true) {
+            getEmployee();
+            } else {
+                console.log(members);
+            };
+
+        } else {
+            const engineer = await inquirer.prompt([
+                {
+                    message: "What is the engineers' name?",
+                    type: 'input',
+                    name: 'engineername'
+                },
+                {
+                    message: 'What is their ID number?',
+                    type: 'input',
+                    name: 'engineerid'
+                },
+                {
+                    message: 'What is their email address?',
+                    type: 'input',
+                    name: 'engineeremail'
+                },
+                {
+                    message: 'What is their personal GitHub URL?',
+                    type: 'input',
+                    name: 'github'
+                },
+                {
+                    message: 'Would you like to enter another employee?',
+                    type: 'confirm',
+                    name: 'confirm',
+                    default: 'false'
+                }
+            ]);
+
+            
+        };
+
+        // if(intern.confirm == true) {
+        //     getEmployee();
+        // } else {
+        //     console.log(members);
+        // };
+
+        // if(engineer.confirm == true) {
+        //     getEmployee();
+        // } else {
+        //     console.log(members);
+        // };
+
+        
+    } catch(error) {
+        console.log(error);
     };
 };
+
+getManager();
+
+// getManager()
+// .then(() => {
+//     getEmployee();
+// })
+// .then(() => {
+//     console.log(members);
+// })
+// .catch((err) => {
+//     console.log(err);
+// });
+
 
 // function promptUser() {
 //     if () {
