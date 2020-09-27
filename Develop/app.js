@@ -23,30 +23,39 @@ const render = require("./lib/htmlRenderer");
 // and to create objects for each team member (using the correct classes as blueprints!)
 
 //Prompt for manager information(only executed once)
-function getManager() {
-    inquirer.prompt([
-        {
-            message: "What is the managers name?",
-            type: 'input',
-            name: 'managername'
-        },
-        {
-            message: "What is their ID number?",
-            type: 'input',
-            name: 'managerid'
-        },
-        {
-            message: "What is thier email address?",
-            type: 'input',
-            name: 'manageremail'
-        },
-        {
-            message: 'What is their office phone number?',
-            type: 'input',
-            name: 'officenumber'
-        }
-    ]);
+async function getManager() {
+    try{
+        const manager = await inquirer.prompt([
+            {
+                message: "What is the managers name?",
+                type: 'input',
+                name: 'name'
+            },
+            {
+                message: "What is their ID number?",
+                type: 'input',
+                name: 'id'
+            },
+            {
+                message: "What is thier email address?",
+                type: 'input',
+                name: 'email'
+            },
+            {
+                message: 'What is their office phone number?',
+                type: 'input',
+                name: 'officenumber'
+            }
+        ]);
+
+        const manager1 = new Manager(manager.name, manager.id, manager.email, manager.officenumber);
+        console.log(manager1);
+    } catch(error) {
+        console.log(error);
+    };
 };
+
+getManager();
 
 //Prompt for emplyee information with choices for either an intern or engineer
 //Recursive function that exits only when the user declines to enter further info
