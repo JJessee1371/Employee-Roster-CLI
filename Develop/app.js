@@ -4,15 +4,17 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+const util = require("util");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+const writeFileAsync = util.promisify(fs.writeFile);
 
 
 const members = [];
-// Prompt for manager information(only executed once)
+// Prompt for manager information and push the new instance to the members array(only executed once)
 async function getManager() {
     try {
         const manager = await inquirer.prompt([
@@ -49,8 +51,7 @@ async function getManager() {
 };
 
 
-// Prompt user for emplyee information with choices for either an intern or engineer
-// Render the HTML once the user declines to enter any other employees
+// Prompt user for emplyee information with choices for including either an intern or engineer
 async function getEmployee() {
     try {
         const choice = await inquirer.prompt([
@@ -97,11 +98,13 @@ async function getEmployee() {
             const intern = new Intern(internQ.name, internQ.id, internQ.email, internQ.school);
             members.push(intern);
 
+            //If user declines to enter more info, the HTML is rendered and written to the output directory
             if(internQ.confirm == true) {
             getEmployee();
             } else {
                 console.log(members);
                 const html = await render(members);
+                await writeFileAsync(outputPath, html);
             };
 
         } else {
@@ -137,11 +140,13 @@ async function getEmployee() {
             const engineer = new Engineer(engineerQ.name, engineerQ.id, engineerQ.email, engineerQ.github);
             members.push(engineer);
 
+            //If user declines to enter more info, the HTML is rendered and written to the output directory
             if(engineerQ.confirm == true) {
                 getEmployee();
             } else {
                 console.log(members);
                 const html = await render(members);
+                await writeFileAsync(outputPath, html);
             };
         }; 
     } catch(error) {
@@ -161,13 +166,3 @@ getManager();
 // `output` folder. You can use the variable `outputPath` above target this location.
 // Hint: you may need to check if the `output` folder exists and create it if it
 // does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
