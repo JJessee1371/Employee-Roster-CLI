@@ -10,23 +10,11 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-//Recursion will be key to this, wrap the prompt in an if statement that will provide an exit functionality
-//whenever the user answers that they would not like to continue.
-
-//Instead of having the entire thing wrapped in a single recursive function, split it into different types of employees
-// this way the manager is onlly asked for once and then based on the users choice they can add in another engineer 
-//or an intern. 
-//Chain events with a .then statement so that the mamager function is always executed before anyting else?
-
-
-// Write code to use inquirer to gather information about the development team membeers,
-// and to create objects for each team member (using the correct classes as blueprints!)
 
 const members = [];
-
-//Prompt for manager information(only executed once)
+// Prompt for manager information(only executed once)
 async function getManager() {
-    try{
+    try {
         const manager = await inquirer.prompt([
             {
                 message: "What is the managers name?",
@@ -61,8 +49,8 @@ async function getManager() {
 };
 
 
-//Prompt for emplyee information with choices for either an intern or engineer
-//Recursive function that exits only when the user declines to enter further info
+// Prompt user for emplyee information with choices for either an intern or engineer
+// Render the HTML once the user declines to enter any other employees
 async function getEmployee() {
     try {
         const choice = await inquirer.prompt([
@@ -77,7 +65,7 @@ async function getEmployee() {
         ]);
 
         if(choice.type == 'Intern') {
-            const intern = await inquirer.prompt([
+            const internQ = await inquirer.prompt([
                 {
                     message: "What is the interns' name?",
                     type: 'input',
@@ -106,17 +94,18 @@ async function getEmployee() {
                 }
             ]);
 
-            const intern1 = new Intern(intern.name, intern.id, intern.email, intern.school);
-            members.push(intern1);
+            const intern = new Intern(internQ.name, internQ.id, internQ.email, internQ.school);
+            members.push(intern);
 
-            if(intern.confirm == true) {
+            if(internQ.confirm == true) {
             getEmployee();
             } else {
                 console.log(members);
+                const html = await render(members);
             };
 
         } else {
-            const engineer = await inquirer.prompt([
+            const engineerQ = await inquirer.prompt([
                 {
                     message: "What is the engineers' name?",
                     type: 'input',
@@ -145,13 +134,14 @@ async function getEmployee() {
                 }
             ]);
 
-            const engineer1 = new Engineer(engineer.name, engineer.id, engineer.email, engineer.github);
-            members.push(engineer1);
+            const engineer = new Engineer(engineerQ.name, engineerQ.id, engineerQ.email, engineerQ.github);
+            members.push(engineer);
 
-            if(engineer.confirm == true) {
+            if(engineerQ.confirm == true) {
                 getEmployee();
             } else {
                 console.log(members);
+                const html = await render(members);
             };
         }; 
     } catch(error) {
@@ -160,17 +150,6 @@ async function getEmployee() {
 };
 
 getManager();
-
-// getManager()
-// .then(() => {
-//     getEmployee();
-// })
-// .then(() => {
-//     console.log(members);
-// })
-// .catch((err) => {
-//     console.log(err);
-// });
 
 
 // After the user has input all employees desired, call the `render` function (required
