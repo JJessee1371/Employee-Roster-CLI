@@ -13,6 +13,22 @@ const render = require("./lib/htmlRenderer");
 const writeFileAsync = util.promisify(fs.writeFile);
 
 
+//Validation functions
+async function validation(input) {
+    if(!input) {
+        return 'This field cannot be blank!';
+    }
+    return true
+};
+
+async function numVal(input) {
+    if(isNaN(input)) {
+        return 'This value must be a number!'
+    }
+    return true
+};
+
+
 const members = [];
 // Prompt for manager information and push the new instance to the members array(only executed once)
 async function getManager() {
@@ -21,22 +37,25 @@ async function getManager() {
             {
                 message: "What is the managers name?",
                 type: 'input',
-                name: 'name'
+                name: 'name',
+                validate: await validation
             },
             {
                 message: "What is their ID number?",
                 type: 'input',
-                name: 'id'
+                name: 'id',
+                validate: await numVal
             },
             {
-                message: "What is thier email address?",
+                message: "What is their email address?",
                 type: 'input',
                 name: 'email'
             },
             {
                 message: 'What is their office phone number?',
                 type: 'input',
-                name: 'officenumber'
+                name: 'officenumber',
+                validate: await numVal
             }
         ]);
 
@@ -70,12 +89,14 @@ async function getEmployee() {
                 {
                     message: "What is the interns' name?",
                     type: 'input',
-                    name: 'name'
+                    name: 'name',
+                    validate: await validation
                 },
                 {
                     message: 'What is their ID number?',
                     type: 'input',
-                    name: 'id'
+                    name: 'id',
+                    validate: await numVal
                 },
                 {
                     message: 'What is their email address?',
@@ -112,12 +133,14 @@ async function getEmployee() {
                 {
                     message: "What is the engineers' name?",
                     type: 'input',
-                    name: 'name'
+                    name: 'name',
+                    validate: await validation
                 },
                 {
                     message: 'What is their ID number?',
                     type: 'input',
-                    name: 'id'
+                    name: 'id',
+                    validate: await numVal
                 },
                 {
                     message: 'What is their email address?',
