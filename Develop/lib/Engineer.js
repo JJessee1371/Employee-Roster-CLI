@@ -1,4 +1,4 @@
-// Engineer class contructor importing employee class
+// Engineer class extends Employee
 const Employee = require('./Employee');
 
 class Engineer extends Employee {

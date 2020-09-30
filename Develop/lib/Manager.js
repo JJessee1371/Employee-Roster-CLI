@@ -1,4 +1,4 @@
-// Manager class constructor requires Employee export
+// Manager class extends Employee
 const Employee = require('./Employee');
 class Manager extends Employee {
     constructor(name, id, email, officeNumber) {
@@ -18,6 +18,3 @@ class Manager extends Employee {
 const e = new Manager('Jon', 123, 'test@test.com', 987654321);
 
 module.exports = Manager;
-
-//Office number property
-//getRole will return manager
