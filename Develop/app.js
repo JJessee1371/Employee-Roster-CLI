@@ -106,7 +106,8 @@ async function getEmployee() {
                 {
                     message: 'What school do they attend?',
                     type: 'input',
-                    name: 'school'
+                    name: 'school',
+                    validate: await validation
                 },
                 {
                     message: 'Would you like to enter another employee?',
