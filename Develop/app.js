@@ -5,15 +5,14 @@ const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
 const util = require("util");
-
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
-
 const render = require("./lib/htmlRenderer");
 const writeFileAsync = util.promisify(fs.writeFile);
+const members = [];
 
 
-//Validation functions
+//User input validation functions
 async function validation(input) {
     if(!input) {
         return 'This field cannot be blank!';
@@ -29,8 +28,102 @@ async function numVal(input) {
 };
 
 
-const members = [];
-// Prompt for manager information and push the new instance to the members array(only executed once)
+//Retrieve Intern information
+async function getIntern() {
+    const internQ = await inquirer.prompt([
+        {
+            message: "What is the interns' name?",
+            type: 'input',
+            name: 'name',
+            validate: await validation
+        },
+        {
+            message: 'What is their ID number?',
+            type: 'input',
+            name: 'id',
+            validate: await numVal
+        },
+        {
+            message: 'What is their email address?',
+            type: 'input',
+            name: 'email'
+        },
+        {
+            message: 'What school do they attend?',
+            type: 'input',
+            name: 'school',
+            validate: await validation
+        },
+        {
+            message: 'Would you like to enter another employee?',
+            type: 'confirm',
+            name: 'confirm',
+            default: 'false'
+        }
+    ]);
+
+    const intern = new Intern(internQ.name, internQ.id, internQ.email, internQ.school);
+    members.push(intern);
+
+    //If user declines to enter more info, the HTML is rendered and written to the output directory
+    if(internQ.confirm == true) {
+        getEmployee();
+        } else {
+            console.log(members);
+            const html = await render(members);
+            await writeFileAsync(outputPath, html);
+        };
+};
+
+
+//Retrieve Engineer information
+async function getEngineer() {
+    const engineerQ = await inquirer.prompt([
+        {
+            message: "What is the engineers' name?",
+            type: 'input',
+            name: 'name',
+            validate: await validation
+        },
+        {
+            message: 'What is their ID number?',
+            type: 'input',
+            name: 'id',
+            validate: await numVal
+        },
+        {
+            message: 'What is their email address?',
+            type: 'input',
+            name: 'email'
+        },
+        {
+            message: 'What is their personal GitHub URL?',
+            type: 'input',
+            name: 'github'
+        },
+        {
+            message: 'Would you like to enter another employee?',
+            type: 'confirm',
+            name: 'confirm',
+            default: 'false'
+        }
+    ]);
+
+    const engineer = new Engineer(engineerQ.name, engineerQ.id, engineerQ.email, engineerQ.github);
+    members.push(engineer);
+
+    //If user declines to enter more info, the HTML is rendered and written to the output directory
+    if(engineerQ.confirm == true) {
+        getEmployee();
+    } else {
+        console.log(members);
+        const html = await render(members);
+        await writeFileAsync(outputPath, html);
+    };
+};
+
+
+//Gather Manager information and then trigger recursive function for employee data
 async function getManager() {
     try {
         const manager = await inquirer.prompt([
@@ -70,7 +163,7 @@ async function getManager() {
 };
 
 
-// Prompt user for emplyee information with choices for including either an intern or engineer
+//Recursive function determining which type of new employee to gather information on
 async function getEmployee() {
     try {
         const choice = await inquirer.prompt([
@@ -85,98 +178,15 @@ async function getEmployee() {
         ]);
 
         if(choice.type == 'Intern') {
-            const internQ = await inquirer.prompt([
-                {
-                    message: "What is the interns' name?",
-                    type: 'input',
-                    name: 'name',
-                    validate: await validation
-                },
-                {
-                    message: 'What is their ID number?',
-                    type: 'input',
-                    name: 'id',
-                    validate: await numVal
-                },
-                {
-                    message: 'What is their email address?',
-                    type: 'input',
-                    name: 'email'
-                },
-                {
-                    message: 'What school do they attend?',
-                    type: 'input',
-                    name: 'school',
-                    validate: await validation
-                },
-                {
-                    message: 'Would you like to enter another employee?',
-                    type: 'confirm',
-                    name: 'confirm',
-                    default: 'false'
-                }
-            ]);
-
-            const intern = new Intern(internQ.name, internQ.id, internQ.email, internQ.school);
-            members.push(intern);
-
-            //If user declines to enter more info, the HTML is rendered and written to the output directory
-            if(internQ.confirm == true) {
-            getEmployee();
-            } else {
-                console.log(members);
-                const html = await render(members);
-                await writeFileAsync(outputPath, html);
-            };
-
+            await getIntern();
         } else {
-            const engineerQ = await inquirer.prompt([
-                {
-                    message: "What is the engineers' name?",
-                    type: 'input',
-                    name: 'name',
-                    validate: await validation
-                },
-                {
-                    message: 'What is their ID number?',
-                    type: 'input',
-                    name: 'id',
-                    validate: await numVal
-                },
-                {
-                    message: 'What is their email address?',
-                    type: 'input',
-                    name: 'email'
-                },
-                {
-                    message: 'What is their personal GitHub URL?',
-                    type: 'input',
-                    name: 'github'
-                },
-                {
-                    message: 'Would you like to enter another employee?',
-                    type: 'confirm',
-                    name: 'confirm',
-                    default: 'false'
-                }
-            ]);
-
-            const engineer = new Engineer(engineerQ.name, engineerQ.id, engineerQ.email, engineerQ.github);
-            members.push(engineer);
-
-            //If user declines to enter more info, the HTML is rendered and written to the output directory
-            if(engineerQ.confirm == true) {
-                getEmployee();
-            } else {
-                console.log(members);
-                const html = await render(members);
-                await writeFileAsync(outputPath, html);
-            };
+            await getEngineer();
         }; 
     } catch(error) {
         console.log(error);
     };
 };
+
 
 getManager();
 
