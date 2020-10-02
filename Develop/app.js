@@ -69,7 +69,6 @@ async function getIntern() {
     if(internQ.confirm == true) {
         getEmployee();
         } else {
-            console.log(members);
             const html = await render(members);
             await writeFileAsync(outputPath, html);
         };
@@ -94,12 +93,14 @@ async function getEngineer() {
         {
             message: 'What is their email address?',
             type: 'input',
-            name: 'email'
+            name: 'email',
+            validate: await validation
         },
         {
             message: 'What is their personal GitHub URL?',
             type: 'input',
-            name: 'github'
+            name: 'github',
+            validate: await validation
         },
         {
             message: 'Would you like to enter another employee?',
@@ -116,7 +117,6 @@ async function getEngineer() {
     if(engineerQ.confirm == true) {
         getEmployee();
     } else {
-        console.log(members);
         const html = await render(members);
         await writeFileAsync(outputPath, html);
     };
@@ -128,7 +128,7 @@ async function getManager() {
     try {
         const manager = await inquirer.prompt([
             {
-                message: "What is the managers name?",
+                message: "What is the managers' name?",
                 type: 'input',
                 name: 'name',
                 validate: await validation
@@ -142,7 +142,8 @@ async function getManager() {
             {
                 message: "What is their email address?",
                 type: 'input',
-                name: 'email'
+                name: 'email',
+                validate: await validation
             },
             {
                 message: 'What is their office phone number?',

@@ -15,6 +15,6 @@ class Manager extends Employee {
     };
 };
 
+//New instance for testing purposes
 const e = new Manager('Jon', 123, 'test@test.com', 987654321);
-
 module.exports = Manager;

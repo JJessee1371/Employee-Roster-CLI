@@ -16,5 +16,6 @@ class Intern extends Employee {
     };
 };
 
+//New instance for testing purposes
 const intern = new Intern ('Jon', 123, 'test@test.com', 'University of Utah');
 module.exports = Intern;

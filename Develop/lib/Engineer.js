@@ -16,6 +16,7 @@ class Engineer extends Employee {
     };
 };
 
+//New instance for testing purposes
 const engineer = new Engineer('Jon', 456, 'test@test.com', 'www.stuff.com');
 module.exports = Engineer;
 

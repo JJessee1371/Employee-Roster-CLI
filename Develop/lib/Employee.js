@@ -23,7 +23,6 @@ class Employee {
     };
 };
 
+//New instance for testing purposes
 const e = new Employee('Jon', 1234, 'test@test.com');
-
-
 module.exports = Employee;
