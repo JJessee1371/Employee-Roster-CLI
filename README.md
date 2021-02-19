@@ -13,6 +13,7 @@ principles of Object Oritented Programming in a manner that could apply directly
 
 ## Technologies
 * HTML
+* CSS/Bootstrap
 * JavaScript
 * Inquirer
 * Jest
