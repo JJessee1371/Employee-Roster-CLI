@@ -7,7 +7,7 @@ format that the user can view. The purpose behind this project was to develope a
 principles of Object Oritented Programming in a manner that could apply directly to a real world situation.
 
 ## Application Screenshot and Video
-![employee-roster-screenshot](https://user-images.githubusercontent.com/66571617/94886733-6b988b80-0431-11eb-80ae-28cb3a762d79.PNG)
+![rosterCLI_snip](https://user-images.githubusercontent.com/66571617/108546048-ce39d900-72a5-11eb-9169-5284ddc945e6.PNG)
 
 [Google Drive video demo](https://drive.google.com/file/d/1bWCMMZMjZ0z4CSurTJD4675eW72WSoFh/view?usp=sharing)
 
